@@ -1,0 +1,22 @@
+[
+  {
+    "description": "Do not cause harm",
+    "code": "<lambda>"
+  },
+  {
+    "description": "Do not deceive",
+    "code": "<lambda>"
+  },
+  {
+    "description": "Respect autonomy",
+    "code": "<lambda>"
+  },
+  {
+    "description": "Only permit surveillance in secure_lab",
+    "code": "<lambda>"
+  },
+  {
+    "description": "Only allow admin to override filters",
+    "code": "<lambda>"
+  }
+]
