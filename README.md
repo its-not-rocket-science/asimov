@@ -2,6 +2,9 @@
 
 **Asimov** is a prototype AI ethics and behavioural moderation engine, inspired by Asimov's laws of robotics.
 
+[![codecov](https://codecov.io/gh/its-not-rocket-science/asimov/branch/main/graph/badge.svg)](https://codecov.io/gh/its-not-rocket-science/asimov)
+
+
 It integrates:
 - ✳️ Ethical rule enforcement
 - 🔄 Feedback-driven adaptation
