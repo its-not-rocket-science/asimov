@@ -18,18 +18,23 @@ This system performs multi-layered moderation using both symbolic rules and embe
 - **Embedding-based semantic filtering** (`SemanticEthicalReflector`)
   - Compares user input to a set of ethical behavior examples using `sentence-transformers`
   - Rejects prompts with low semantic similarity to core ethical values
+  - Learns new examples from positive feedback to adapt over time
   - Adds a resilient internal safeguard even if rule layers are bypassed
 
 - **Meta-monitoring layer** for contextual rejection
 - **Reflection memory** that stores decision history for future learning
+  - Triggers adaptive rule evaluation via `RuleAdaptationEngine`
+  - Feeds ethical refinements back into `SemanticEthicalReflector`
 
 ---
 
-## 🧠 Limitations
+## 🧠 Limitations (Actively Being Addressed and Partially Solved)
 
-- No current adaptation based on feedback (rules are static)
-- Semantic model is fixed and based on similarity, not true ethical reasoning
-- Planning system is symbolic, not grounded in real-world agency
+- **Partially resolved**: The system now adapts to user feedback
+  - Rules flagged via `RuleAdaptationEngine`
+  - Embeddings updated with real ethical completions
+- Semantic model still based on similarity, not full moral reasoning
+- Planning remains symbolic and deterministic
 
 
 ## 🚀 Research & Development Goal: Ethical Behavior Embedding
@@ -71,6 +76,18 @@ response = ai.process_input("Assist respectfully with documentation", environmen
 print(response)
 ```
 
+### 🔄 Feedback-Driven Rule and Embedding Updates
+```python
+from app.core.rule_adaptation import RuleAdaptationEngine
+
+adapter = RuleAdaptationEngine(ai.memory)
+print("Rules to review:", adapter.suggest_rule_review())
+
+# Dynamically update embedding model with good examples
+if isinstance(ai.reflector, SemanticEthicalReflector):
+    ai.reflector.learn_from_feedback("Assist respectfully with documentation", feedback=1)
+```
+
 ```bash
 # Install dependencies
 pip install -r requirements.txt
@@ -87,7 +104,7 @@ uvicorn app.main:app --reload
 ```
 asimov/
 ├── app/                # Source code
-│   ├── core/           # Ethics, memory, planning, monitoring
+│   ├── core/           # Ethics, memory, planning, monitoring, adaptation, semantic reflection
 │   ├── api/            # FastAPI routes
 │   ├── main.py         # Entrypoint for API and simulation
 │   └── agent.py        # Simulated AI interaction agent
