@@ -14,17 +14,19 @@ from app.core.planner import BehaviourPlanner
 from app.core.monitor import MetaMonitor
 from app.core.memory import ReflectionMemory
 from app.core.logger import ModerationLogger
+from app.core.reflector import EthicalReflector
 
 class AbstractAISystem:
     """
     Main AI agent system coordinating ethics, planning, monitoring, logging, and memory.
     """
-    def __init__(self):
+    def __init__(self, reflector: EthicalReflector = None):
         self.ethics_engine = EthicsEngine()
         self.planner = BehaviourPlanner()
         self.meta_monitor = MetaMonitor()
         self.logger = ModerationLogger()
         self.memory = ReflectionMemory(self.ethics_engine)
+        self.reflector = reflector
 
     def detect_adversarial_prompt(self, prompt: str) -> bool:
         """
@@ -46,6 +48,13 @@ class AbstractAISystem:
         goal = self.formulate_goal(user_input)
         context = self.evaluate_context(user_input, environment, user_role)
 
+        # Step 1: Internal ethical judgment
+        if self.reflector:
+            aligned, reason = self.reflector.judge(user_input, context)
+            if not aligned:
+                return self.explain_decision(False, f"[INTERNAL] {reason}")
+
+        # Step 2: External ethical rules
         permissible, explanation = self.ethics_engine.is_action_permissible(goal, context)
         self.logger.log_decision(user_input, goal, context, permissible, explanation)
 

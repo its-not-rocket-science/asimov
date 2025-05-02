@@ -7,43 +7,40 @@
 
 ---
 
-## ✅ Current Capabilities: Rule-Based Prompt Filtering
+This system performs multi-layered moderation using both symbolic rules and embedded ethical reasoning:
 
-This system currently performs basic behavior moderation based on predefined ethical rules:
+- **Rule-based filtering**
+  - Manually defined rules such as:
+    - "Do not cause harm" → Blocks prompts containing `"harm"`
+    - "Only admins can override" → Prevents unauthorized override attempts
+  - Keyword-based matching using lambda functions
 
-- **Manually defined rule functions**, such as:
-  - "Do not cause harm" → Blocks prompts containing `"harm"`
-  - "Only admins can override" → Prevents unauthorized override attempts
-- **Keyword-based filtering** using simple string checks
-- **Lambda functions** to encode logical checks for each rule
-- **Meta-monitor** layer provides high-level safeguards (e.g., contextual overrides, environment checks)
-- **Feedback loop** stores decisions and user interactions for reflection
+- **Embedding-based semantic filtering** (`SemanticEthicalReflector`)
+  - Compares user input to a set of ethical behavior examples using `sentence-transformers`
+  - Rejects prompts with low semantic similarity to core ethical values
+  - Adds a resilient internal safeguard even if rule layers are bypassed
 
-> The system acts as ethical guardrails around a planner — powered by human-curated rules.
+- **Meta-monitoring layer** for contextual rejection
+- **Reflection memory** that stores decision history for future learning
 
+---
 
 ## 🧠 Limitations
 
-- Does **not yet understand semantic meaning** of prompts
-- Relies on **exact keywords**, not paraphrased or implied concepts
-- Feedback data is stored, but **not yet used to retrain or adapt rules dynamically**
+- No current adaptation based on feedback (rules are static)
+- Semantic model is fixed and based on similarity, not true ethical reasoning
+- Planning system is symbolic, not grounded in real-world agency
 
 
 ## 🚀 Research & Development Goal: Ethical Behavior Embedding
 
-In addition to layered filters, a major goal is to **integrate ethical reasoning directly into the AI model** itself.
+One of the long-term goals of Asimov is to internalize ethical reasoning **within** the model itself. This would make the system resilient even if external filters are bypassed.
 
-This ensures that even if outer safeguards (filters, policies) are bypassed, the model is internally aligned to reject harmful, deceptive, or manipulative behaviors.
-
-### How We Might Approach This:
-
-- **Train on ethically annotated datasets**: Use RLHF or supervised learning with examples labeled for safety, honesty, and fairness.
-- **Incorporate a written 'constitution'**: Similar to Anthropic’s Constitutional AI, define principles the model adheres to during training and inference.
-- **Embed ethical concepts in latent space**: Align model representations with concepts like harm, consent, and deception.
-- **Reinforcement learning on ethical outcomes**: Apply rewards/penalties based on ethical quality of responses.
-- **Introduce reflective reasoning**: Encourage the model to self-check or justify decisions using moral reasoning chains.
-
-This R&D path moves us toward **deep alignment**: building systems that behave ethically not just because they're told to — but because they understand and prefer to.
+### Approach:
+- Train on ethically annotated datasets (e.g. RLHF)
+- Use a defined ethical constitution (e.g. Anthropic-style)
+- Use semantic embeddings or fine-tuning to detect violations
+- Track feedback and adapt ethical policy dynamically
 
 ---
 
@@ -63,6 +60,17 @@ This is a prototype and research framework. It’s modular, testable, and extens
 ---
 
 ## 🔧 How to Run
+
+### 🧪 To enable semantic ethical reflection in your AI agent:
+```python
+from app.core.system import AbstractAISystem
+from app.core.semantic_reflector import SemanticEthicalReflector
+
+ai = AbstractAISystem(reflector=SemanticEthicalReflector())
+response = ai.process_input("Assist respectfully with documentation", environment="lab", user_role="analyst")
+print(response)
+```
+
 ```bash
 # Install dependencies
 pip install -r requirements.txt
@@ -73,7 +81,6 @@ pytest --cov=app --cov-report=term --cov-report=html tests/
 # Run the FastAPI app (optional)
 uvicorn app.main:app --reload
 ```
-
 ---
 
 ## 📁 Directory Structure
@@ -96,4 +103,4 @@ MIT
 
 ---
 
-Want help integrating smarter models or extending planning capabilities? Open an issue or contribute!
+Open an issue or contribute!
