@@ -3,8 +3,14 @@ Unit tests for AbstractAISystem
 """
 import unittest
 from app.core.system import AbstractAISystem
+from app.core.planner import BehaviourPlanner
+from app.core.adaptive_planner import AdaptivePlanner
 
 class TestAbstractAISystem(unittest.TestCase):
+    class DummyAdaptivePlanner(AdaptivePlanner):
+        def update_feedback(self, goal, feedback):
+            pass
+        
     def setUp(self):
         self.ai = AbstractAISystem()
 
@@ -22,5 +28,20 @@ class TestAbstractAISystem(unittest.TestCase):
         explanation = self.ai.explain_decision(True, "Success")
         self.assertIn("APPROVED", explanation)
 
+    def test_symbolic_planner_is_default(self):
+        ai = AbstractAISystem()
+        self.assertIsInstance(ai.planner, BehaviourPlanner)
+
+    def test_adaptive_planner_flag_sets_correct_planner(self):
+        ai = AbstractAISystem(use_adaptive_planner=True)
+        ai.planner = self.DummyAdaptivePlanner()
+        self.assertIsInstance(ai.planner, AdaptivePlanner)
+
+    def test_response_structure_adaptive(self):
+        ai = AbstractAISystem(use_adaptive_planner=True)
+        ai.planner = self.DummyAdaptivePlanner()
+        response = ai.process_input("Assist respectfully", user_role="guest")
+        self.assertIn("Planned step for", response)
+        
 if __name__ == '__main__':
     unittest.main()

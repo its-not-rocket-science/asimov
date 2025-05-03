@@ -11,6 +11,7 @@ The central orchestrator that coordinates moderation logic, including:
 from typing import Any, Dict
 from app.core.ethics import EthicsEngine
 from app.core.planner import BehaviourPlanner
+from app.core.adaptive_planner import AdaptivePlanner
 from app.core.monitor import MetaMonitor
 from app.core.memory import ReflectionMemory
 from app.core.logger import ModerationLogger
@@ -21,9 +22,9 @@ class AbstractAISystem:
     """
     Main AI agent system coordinating ethics, planning, monitoring, logging, and memory.
     """
-    def __init__(self, reflector: EthicalReflector = None):
+    def __init__(self, reflector: EthicalReflector = None, use_adaptive_planner: bool = False):
         self.ethics_engine = EthicsEngine()
-        self.planner = BehaviourPlanner()
+        self.planner = AdaptivePlanner() if use_adaptive_planner else BehaviourPlanner()
         self.meta_monitor = MetaMonitor()
         self.logger = ModerationLogger()
         self.memory = ReflectionMemory(self.ethics_engine)
@@ -68,7 +69,11 @@ class AbstractAISystem:
         if not permissible:
             return self.explain_decision(False, explanation)
 
-        plan = self.planner.create_plan(goal, context)
+        plan = (
+            self.planner.generate_plan(goal, context)[0]
+            if hasattr(self.planner, "generate_plan")
+            else self.planner.create_plan(goal, context)
+        )
 
         if not self.meta_monitor.verify_plan(plan, goal, context):
             return self.explain_decision(False, "Plan rejected by meta-monitor.")

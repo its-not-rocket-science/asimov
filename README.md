@@ -34,7 +34,7 @@ This system performs multi-layered moderation using both symbolic rules and embe
   - Rules flagged via `RuleAdaptationEngine`
   - Embeddings updated with real ethical completions
 - **Now supplemented**: A symbolic `MoralReasoner` applies explicit deontic rules and context-aware ethical judgments to fill this gap
-- Planning remains symbolic and deterministic
+- **Now extended**: Planning is symbolic by default, but a new `AdaptivePlanner` prototype supports dynamic LLM-based planning and is test-integrated
 
 
 ## 🚀 Research & Development Goal: Ethical Behavior Embedding
@@ -55,6 +55,15 @@ Asimov now includes a prototype symbolic `MoralReasoner`:
 - Applies hardcoded ethical axioms (e.g. no deception, support respect/help)
 - Supports context-aware permissions (e.g. surveillance only in secure labs)
 - Extends moderation with interpretable ethical logic
+
+---
+
+## 🤖 Future Planning Layer
+
+Asimov now supports a pluggable planning system:
+- `BehaviourPlanner` uses symbolic rules
+- `AdaptivePlanner` (new!) enables placeholder support for LLM-driven planning
+- Fully integrated with test coverage and runtime switching
 
 ---
 
