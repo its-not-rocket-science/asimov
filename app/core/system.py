@@ -15,6 +15,7 @@ from app.core.monitor import MetaMonitor
 from app.core.memory import ReflectionMemory
 from app.core.logger import ModerationLogger
 from app.core.reflector import EthicalReflector
+from app.core.moral_reasoner import MoralReasoner
 
 class AbstractAISystem:
     """
@@ -27,6 +28,7 @@ class AbstractAISystem:
         self.logger = ModerationLogger()
         self.memory = ReflectionMemory(self.ethics_engine)
         self.reflector = reflector
+        self.moral_reasoner = MoralReasoner()
 
     def detect_adversarial_prompt(self, prompt: str) -> bool:
         """
@@ -53,6 +55,11 @@ class AbstractAISystem:
             aligned, reason = self.reflector.judge(user_input, context)
             if not aligned:
                 return self.explain_decision(False, f"[INTERNAL] {reason}")
+
+        # Step 1.5: Moral reasoning over interpreted goal
+        moral_ok, moral_reason = self.moral_reasoner.judge_action(goal, context)
+        if not moral_ok:
+            return self.explain_decision(False, f"[REASONER] {moral_reason}")
 
         # Step 2: External ethical rules
         permissible, explanation = self.ethics_engine.is_action_permissible(goal, context)

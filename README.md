@@ -33,7 +33,7 @@ This system performs multi-layered moderation using both symbolic rules and embe
 - **Partially resolved**: The system now adapts to user feedback
   - Rules flagged via `RuleAdaptationEngine`
   - Embeddings updated with real ethical completions
-- Semantic model still based on similarity, not full moral reasoning
+- **Now supplemented**: A symbolic `MoralReasoner` applies explicit deontic rules and context-aware ethical judgments to fill this gap
 - Planning remains symbolic and deterministic
 
 
@@ -46,6 +46,15 @@ One of the long-term goals of Asimov is to internalize ethical reasoning **withi
 - Use a defined ethical constitution (e.g. Anthropic-style)
 - Use semantic embeddings or fine-tuning to detect violations
 - Track feedback and adapt ethical policy dynamically
+
+---
+
+## ⚖️ Moral Reasoning Layer
+
+Asimov now includes a prototype symbolic `MoralReasoner`:
+- Applies hardcoded ethical axioms (e.g. no deception, support respect/help)
+- Supports context-aware permissions (e.g. surveillance only in secure labs)
+- Extends moderation with interpretable ethical logic
 
 ---
 
