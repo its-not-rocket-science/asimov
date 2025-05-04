@@ -39,6 +39,14 @@ This system performs multi-layered moderation using both symbolic rules and embe
 
 ## 🚀 Research & Development Goal: Ethical Behavior Embedding
 
+### 🧠 Trainable Ethical Reflector (Work in Progress)
+To move beyond static semantic filtering, Asimov will support training an ethical classifier or regressor using real feedback:
+- Learns from labeled prompts and outcomes (e.g. safe vs. unsafe)
+- May be implemented using `sklearn`, `transformers`, or `trl`
+- Will operate alongside existing reflectors but allow fine-tuning over time
+- Could eventually replace or augment static thresholds and heuristics
+
+
 One of the long-term goals of Asimov is to internalize ethical reasoning **within** the model itself. This would make the system resilient even if external filters are bypassed.
 
 ### Approach:
