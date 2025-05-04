@@ -7,3 +7,4 @@ pytest-cov
 httpx
 sentence-transformers
 scikit-learn
+openai

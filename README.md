@@ -58,6 +58,18 @@ Asimov now includes a prototype symbolic `MoralReasoner`:
 
 ---
 
+## 🤖 Adaptive Planning Layer
+
+Asimov now supports a pluggable, feedback-aware planning system:
+- `BehaviourPlanner`: deterministic symbolic rules
+- `AdaptivePlanner`: supports
+  - LLM-based plan generation (via OpenAI API)
+  - Simulated probabilistic fallback logic
+  - Feedback-based confidence adjustment
+  - Internal memory to reinforce or suppress plans based on cumulative reward signals
+
+---
+
 ## 🤖 Future Planning Layer
 
 Asimov now supports a pluggable planning system:
