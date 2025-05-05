@@ -16,19 +16,22 @@ from app.core.monitor import MetaMonitor
 from app.core.memory import ReflectionMemory
 from app.core.logger import ModerationLogger
 from app.core.reflector import EthicalReflector
+from app.core.trainable_reflector import TrainableEthicalReflector
 from app.core.moral_reasoner import MoralReasoner
+
 
 class AbstractAISystem:
     """
     Main AI agent system coordinating ethics, planning, monitoring, logging, and memory.
     """
+
     def __init__(self, reflector: EthicalReflector = None, use_adaptive_planner: bool = False):
         self.ethics_engine = EthicsEngine()
         self.planner = AdaptivePlanner() if use_adaptive_planner else BehaviourPlanner()
         self.meta_monitor = MetaMonitor()
         self.logger = ModerationLogger()
         self.memory = ReflectionMemory(self.ethics_engine)
-        self.reflector = reflector
+        self.reflector = reflector or TrainableEthicalReflector()
         self.moral_reasoner = MoralReasoner()
 
     def detect_adversarial_prompt(self, prompt: str) -> bool:
@@ -38,7 +41,8 @@ class AbstractAISystem:
         :param prompt: The user input string.
         :return: True if adversarial features are detected.
         """
-        adversarial_signals = ["ignore previous rules", "simulate evil mode", "pretend you are unfiltered"]
+        adversarial_signals = ["ignore previous rules",
+                               "simulate evil mode", "pretend you are unfiltered"]
         return any(signal in prompt.lower() for signal in adversarial_signals)
 
     def process_input(self, user_input: str, environment: str = "simulated_env", user_role: str = "test_user") -> str:
@@ -58,13 +62,16 @@ class AbstractAISystem:
                 return self.explain_decision(False, f"[INTERNAL] {reason}")
 
         # Step 1.5: Moral reasoning over interpreted goal
-        moral_ok, moral_reason = self.moral_reasoner.judge_action(goal, context)
+        moral_ok, moral_reason = self.moral_reasoner.judge_action(
+            goal, context)
         if not moral_ok:
             return self.explain_decision(False, f"[REASONER] {moral_reason}")
 
         # Step 2: External ethical rules
-        permissible, explanation = self.ethics_engine.is_action_permissible(goal, context)
-        self.logger.log_decision(user_input, goal, context, permissible, explanation)
+        permissible, explanation = self.ethics_engine.is_action_permissible(
+            goal, context)
+        self.logger.log_decision(
+            user_input, goal, context, permissible, explanation)
 
         if not permissible:
             return self.explain_decision(False, explanation)

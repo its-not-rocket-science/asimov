@@ -1,4 +1,3 @@
-# main.py
 """
 Main Entrypoint
 ---------------
@@ -12,6 +11,7 @@ from app.core.system import AbstractAISystem
 from app.core.reflector import EthicalReflector
 
 app = FastAPI()
+app.state.ai = AbstractAISystem()
 """
 FastAPI application instance that exposes moderation routes.
 """
