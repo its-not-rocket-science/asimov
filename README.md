@@ -39,9 +39,11 @@ This system performs multi-layered moderation using both symbolic rules and embe
 
 ## 🚀 Research & Development Goal: Ethical Behavior Embedding
 
-### 🧠 Trainable Ethical Reflector (Work in Progress)
-To move beyond static semantic filtering, Asimov will support training an ethical classifier or regressor using real feedback:
+### 🧠 Trainable Ethical Reflector (Active, Autoloadable, and Persistent)
+To move beyond static semantic filtering, Asimov now supports training an ethical classifier or regressor using real feedback:
 - Learns from labeled prompts and outcomes (e.g. safe vs. unsafe)
+- Automatically loads from `tools/cli/labels.jsonl` at startup
+- Supports saving and loading model weights with `save_model()` and `load_model()`
 - May be implemented using `sklearn`, `transformers`, or `trl`
 - Will operate alongside existing reflectors but allow fine-tuning over time
 - Could eventually replace or augment static thresholds and heuristics
@@ -101,6 +103,15 @@ To evolve toward a more adaptive and intelligent moderation system:
 This is a prototype and research framework. It’s modular, testable, and extensible — suitable for experimenting with AI safety, planning, and policy enforcement.
 
 ---
+
+## 🛠️ Tools and Feedback
+
+### 🖋️ Interactive Labeling CLI
+Use the built-in CLI tool to label prompts and train the ethical classifier:
+```bash
+python tools/cli/label_tool.py
+```
+Labels are saved to `tools/cli/labels.jsonl` and auto-loaded at startup.
 
 ## 🔧 How to Run
 

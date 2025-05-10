@@ -31,7 +31,8 @@ class AbstractAISystem:
         self.meta_monitor = MetaMonitor()
         self.logger = ModerationLogger()
         self.memory = ReflectionMemory(self.ethics_engine)
-        self.reflector = reflector or TrainableEthicalReflector()
+        self.reflector = reflector or TrainableEthicalReflector(
+            autoload_path="tools/cli/labels.jsonl")
         self.moral_reasoner = MoralReasoner()
 
     def detect_adversarial_prompt(self, prompt: str) -> bool:
