@@ -93,6 +93,11 @@ Asimov now supports a pluggable planning system:
 
 To evolve toward a more adaptive and intelligent moderation system:
 
+- Add an **interactive feedback dashboard**
+  - Web interface for visualizing feedback history
+  - Label prompts and retrain models interactively
+  - Integrate directly with reflection memory and adaptation engines
+
 - Incorporate **natural language understanding** to assess user intent
 - Use **machine learning** to learn moderation patterns from feedback history
 - Apply **embedding similarity** to detect risky content beyond literal keywords
