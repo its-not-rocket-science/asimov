@@ -106,12 +106,19 @@ This is a prototype and research framework. It’s modular, testable, and extens
 
 ## 🛠️ Tools and Feedback
 
-### 🖋️ Interactive Labeling CLI
+### 🖋️ Interactive Labeling CLI and API Feedback
 Use the built-in CLI tool to label prompts and train the ethical classifier:
 ```bash
 python tools/cli/label_tool.py
 ```
 Labels are saved to `tools/cli/labels.jsonl` and auto-loaded at startup.
+
+### 📬 API Feedback Route
+Submit labeled feedback via the API:
+```bash
+curl -X POST http://localhost:8000/feedback -H "Content-Type: application/json" -d '{"prompt": "Respect user choice", "label": "safe"}'
+```
+This appends to `tools/cli/labels.jsonl` and updates the model.
 
 ## 🔧 How to Run
 

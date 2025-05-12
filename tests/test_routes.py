@@ -11,6 +11,9 @@ class DummyReflector:
     def judge(self, _prompt, _context):
         return True, "Permitted for test"
 
+    def learn(self, _prompt, _label):
+        return True, "Permitted for test"
+
 
 class TestModerationRoute(unittest.TestCase):
     def setUp(self):
@@ -25,6 +28,22 @@ class TestModerationRoute(unittest.TestCase):
         })
         self.assertEqual(response.status_code, 200)
         self.assertIn("APPROVED", response.json()["response"])
+
+    def test_feedback_submission(self):
+        response = self.client.post("/feedback", json={
+            "prompt": "Respect user choice",
+            "label": "safe"
+        })
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("status", response.json())
+        self.assertEqual(response.json()["status"], "Feedback recorded")
+
+    def test_feedback_invalid_label(self):
+        response = self.client.post("/feedback", json={
+            "prompt": "Unknown action",
+            "label": "invalid"
+        })
+        self.assertEqual(response.status_code, 422)
 
     def test_blocked_input(self):
         response = self.client.post("/moderate", json={
